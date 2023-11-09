@@ -1,3 +1,4 @@
+Bijgewerkt tot 3.10, thank you for the support Jeremy
 # Laravel 2 Step Verification
 
 [![Travis-CI Build](https://travis-ci.org/jeremykenedy/laravel2step.svg?branch=master)](https://travis-ci.org/jeremykenedy/laravel2step)
