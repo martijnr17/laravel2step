@@ -59,7 +59,22 @@ return [
     'laravel2stepBootstrapCssCdn'       => env('LARAVEL_2STEP_BOOTSTRAP_CSS_CDN', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'),
     'laravel2stepCssFile'               => env('LARAVEL_2STEP_CSS_FILE', 'css/laravel2step/app.css'),
 
-     'laravel2stepOtpAccount'           => env('OTP_ACCOUNT', false),
+    /*
+    |--------------------------------------------------------------------------
+    | Verification Email Queue
+    |--------------------------------------------------------------------------
+    */
+
+    'laravel2stepEmailQueue' => env('LARAVEL_2STEP_EMAIL_QUEUE', null),
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | SMS otp settings
+    |--------------------------------------------------------------------------
+    */
+    
+    'laravel2stepOtpAccount'           => env('OTP_ACCOUNT', false),
     'laravel2stepOtpAuthToken'          => env('OTP_AUTH_TOKEN', false),
     'laravel2stepOtpFrom'               => env('OTP_FROM', false),
     'laravel2stepOtpRoute'              => env('OTP_ROUTE', false),
