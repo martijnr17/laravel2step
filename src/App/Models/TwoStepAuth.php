@@ -37,18 +37,6 @@ class TwoStepAuth extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'requestDate',
-        'authDate',
-    ];
-
-    /**
      * Fillable fields for a Profile.
      *
      * @var array
@@ -67,6 +55,8 @@ class TwoStepAuth extends Model
         'authCode'   => 'string',
         'authCount'  => 'integer',
         'authStatus' => 'boolean',
+        'requestDate' => 'datetime',
+        'authDate'    => 'datetime',
     ];
 
     /**
