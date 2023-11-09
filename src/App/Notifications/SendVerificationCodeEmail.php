@@ -35,6 +35,18 @@ class SendVerificationCodeEmail extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+     /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    public function viaQueues()
+    {
+        return [
+            'mail' => config('laravel2step.laravel2stepEmailQueue'),
+        ];
+    }
+    
     /**
      * Get the mail representation of the notification.
      *
