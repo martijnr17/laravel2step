@@ -27,7 +27,6 @@ class Laravel2step
         switch ($uri) {
             case 'verification/needed':
             case 'password/reset':
-            case 'register':
             case 'logout':
             case 'login':
                 break;
