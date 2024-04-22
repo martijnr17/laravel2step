@@ -56,7 +56,9 @@ trait Laravel2StepTrait
             $this->resetAuthStatus($twoStepAuth);
 
             return true;
-        }
+        }else{
+		$this->resetActivationCountdown($twoStepAuth);
+	}
 
         return false;
     }
