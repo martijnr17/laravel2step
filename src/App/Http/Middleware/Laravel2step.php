@@ -30,7 +30,6 @@ class Laravel2step
             case 'register':
             case 'logout':
             case 'login':
-            case '/':
                 break;
 
             default:
