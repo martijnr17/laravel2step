@@ -78,4 +78,8 @@ return [
     'laravel2stepOtpAuthToken'          => env('OTP_AUTH_TOKEN', false),
     'laravel2stepOtpFrom'               => env('OTP_FROM', false),
     'laravel2stepOtpRoute'              => env('OTP_ROUTE', false),
+
+    'laravel2stepOtp2ClientID'			=> env('OTP2_CLIENT_ID', false),
+    'laravel2stepOtp2ClientSecret'      => env('OTP2_CLIENT_SECRET', false),
+    'laravel2stepOtp2Sender'            => env('OTP2_SENDER', false),
 ];
