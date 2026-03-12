@@ -220,19 +220,43 @@ trait Laravel2StepTrait
      * @return void
      */
 	//changes
-       protected function sendVerificationCodeNotification($twoStepAuth, $deliveryMethod = null)
+      protected function sendVerificationCodeNotification($twoStepAuth, $deliveryMethod = null)
     {
         $user = Auth::User();
 		if(!isset($user->mobiel)){
 			$user->notify(new SendVerificationCodeEmail($user, $twoStepAuth->authCode));
 		}else{
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL,"https://api.spryngsms.com/api/send.php");
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS,"USERNAME=".config('laravel2step.laravel2stepOtpAccount')."&PASSWORD=".config('laravel2step.laravel2stepOtpAuthToken')."&SENDER=".config('laravel2step.laravel2stepOtpFrom')."&ROUTE=".config('laravel2step.laravel2stepOtpRoute')."&DESTINATION=".$user->mobiel."&BODY=Code:".$twoStepAuth->authCode."");
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($ch);
-			curl_close ($ch);
+			if(config('laravel2step.laravel2stepOtpService') == 'Spryng'){
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL,"https://api.spryngsms.com/api/send.php");
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,"USERNAME=".config('laravel2step.laravel2stepOtpAccount')."&PASSWORD=".config('laravel2step.laravel2stepOtpAuthToken')."&SENDER=".config('laravel2step.laravel2stepOtpFrom')."&ROUTE=".config('laravel2step.laravel2stepOtpRoute')."&DESTINATION=".$user->mobiel."&BODY=Code:".$twoStepAuth->authCode."");
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$response = curl_exec($ch);
+				curl_close ($ch);
+			}elseif(config('laravel2step.laravel2stepOtpService') == 'SMSTOOLS'){
+				$ch = curl_init();
+				$url = "https://api.smsgatewayapi.com/v1/message/send";
+				$client_id = config('laravel2stepOtp2ClientID'); // Your API client ID (required)
+				$client_secret = config('laravel2stepOtp2ClientSecret'); // Your API client secret (required)
+				$data = [
+					'message' => "Code:".$twoStepAuth->authCode, //Message (required)
+					'to' => $user->mobiel, //Receiver (required)
+					'sender' => config('laravel2stepOtp2Sender') //Sender (required)
+				];
+				curl_setopt($ch, CURLOPT_URL, "$url");
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_VERBOSE, true);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, [
+					"X-Client-Id: $client_id",
+					"X-Client-Secret: $client_secret",
+					"Content-Type: application/json",
+				]);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+				$response = curl_exec($ch);
+				curl_close ($ch);
+			}
 		}
         $twoStepAuth->requestDate = Carbon::now();
 
