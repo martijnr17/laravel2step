@@ -56,9 +56,7 @@ trait Laravel2StepTrait
             $this->resetAuthStatus($twoStepAuth);
 
             return true;
-        }else{
-		$this->resetActivationCountdown($twoStepAuth);
-	}
+        }
 
         return false;
     }
@@ -220,7 +218,7 @@ trait Laravel2StepTrait
      * @return void
      */
 	//changes
-      protected function sendVerificationCodeNotification($twoStepAuth, $deliveryMethod = null)
+       protected function sendVerificationCodeNotification($twoStepAuth, $deliveryMethod = null)
     {
         $user = Auth::User();
 		if(!isset($user->mobiel)){
@@ -234,15 +232,22 @@ trait Laravel2StepTrait
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$response = curl_exec($ch);
 				curl_close ($ch);
+				echo "Spryng";
 			}elseif(config('laravel2step.laravel2stepOtpService') == 'SMSTOOLS'){
+				if (strpos($user->mobiel, '06') === 0) {
+					$mobiel = '+31' . substr($user->mobiel, 1); // 06 → 316
+				}else{
+					$mobiel = $user->mobiel;
+				}
+
 				$ch = curl_init();
 				$url = "https://api.smsgatewayapi.com/v1/message/send";
-				$client_id = config('laravel2stepOtp2ClientID'); // Your API client ID (required)
-				$client_secret = config('laravel2stepOtp2ClientSecret'); // Your API client secret (required)
+				$client_id = config('laravel2step.laravel2stepOtp2ClientID'); // Your API client ID (required)
+				$client_secret = config('laravel2step.laravel2stepOtp2ClientSecret'); // Your API client secret (required)
 				$data = [
 					'message' => "Code:".$twoStepAuth->authCode, //Message (required)
-					'to' => $user->mobiel, //Receiver (required)
-					'sender' => config('laravel2stepOtp2Sender') //Sender (required)
+					'to' => $mobiel, //Receiver (required)
+					'sender' => config('laravel2step.laravel2stepOtp2Sender') //Sender (required)
 				];
 				curl_setopt($ch, CURLOPT_URL, "$url");
 				curl_setopt($ch, CURLOPT_POST, true);
@@ -256,6 +261,8 @@ trait Laravel2StepTrait
 				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 				$response = curl_exec($ch);
 				curl_close ($ch);
+				error_log(print_r($response,true));
+
 			}
 		}
         $twoStepAuth->requestDate = Carbon::now();
