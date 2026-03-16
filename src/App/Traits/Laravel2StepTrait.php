@@ -261,8 +261,6 @@ trait Laravel2StepTrait
 				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 				$response = curl_exec($ch);
 				curl_close ($ch);
-				error_log(print_r($response,true));
-
 			}
 		}
         $twoStepAuth->requestDate = Carbon::now();
